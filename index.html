@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <script src="./asset/js/jquery_3.7.1.js"></script>
+        <link rel="stylesheet" href="./asset/style/css.css" />
+        <link
+            rel="stylesheet"
+            href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"
+        />
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    </head>
+    <body>
+        <div id="container">
+            <h1>排序游戏</h1>
+            <h2>
+                游戏规则：点击开始游戏后，灰色区域内的瓶子会随机排列，你暂时看不到正确的顺序，你需要拖动下方的瓶子进行排序，完成后点击提交按钮，如果排序正确，游戏结束，否则就重新排序。
+            </h2>
+            <div id="riddle">
+                <ul id="bottleList"></ul>
+                <div class="mask"></div>
+            </div>
+            <div id="sortArea">
+                <ul id="sortList"></ul>
+            </div>
+            <div class="bottom-bar" id="startBar">
+                <button id="startSort" onclick="startGame()">开始游戏</button>
+            </div>
+            <div class="bottom-bar" id="tipBar">
+                <p>
+                    当前轮数：<b id="roundNum">0</b>&nbsp;&nbsp;&nbsp;<span>正确<b id="rightCount">0</b>个</span>
+                </p>
+                <button id="submitSort" onclick="submitSort()">提交</button>
+                <button id="restart" onclick="startGame()">重新开始</button>
+            </div>
+        </div>
+    </body>
+
+    <script>
+        let roundNum = 0;
+        let currentArr = [];
+        let resultArr = [];
+
+        $(function () {
+            let dragItem = null;
+            // 记录拖拽元素
+            $(document).on("mousedown", "#sortList li", function (e) {
+                dragItem = $(this);
+                e.preventDefault(); // 禁止文本选择
+            });
+
+            // 当释放鼠标时，交换元素位置
+            $(document).on("mouseup", function (e) {
+                if (dragItem) {
+                    const dropTarget = $(e.target).closest("li");
+                    if (
+                        dropTarget.length &&
+                        dropTarget.data("num") !== dragItem.data("num")
+                    ) {
+                        let temp;
+                        let dropNum = dropTarget.attr("data-num");
+                        let dragNum = dragItem.attr("data-num");
+                        temp = dropNum;
+                        dropTarget.attr("data-num", dragNum);
+                        currentArr[dropTarget.index()] = dragNum;
+                        dragItem.attr("data-num", temp);
+                        currentArr[dragItem.index()] = temp;
+                    }
+
+                    // 清理状态
+                    dragItem = null;
+                }
+            });
+
+            $("#sortList li").on("dragstart", function (e) {
+                e.preventDefault();
+            });
+        });
+
+        function startGame() {
+            getRandomBottle();
+            getRandomBottle(false);
+            roundNum = 0;
+            $("#roundNum").text(roundNum);
+            $("#startBar").hide();
+            $("#tipBar").show();
+            $('.mask').css('opacity', 1);
+            getRightCount();
+        }
+
+        function submitSort() {
+            roundNum++;
+            $("#roundNum").text(roundNum);
+            getRightCount();
+            if ($("#rightCount").text() == resultArr.length) {
+                alert("恭喜你，排序正确！");
+                $("#startBar").show();
+                $("#tipBar").hide();
+                $('.mask').css('opacity', 0);
+            }
+        }
+
+        function getRightCount(){
+            let count = 0;
+            for (let i = 0; i < currentArr.length; i++) {
+                if (currentArr[i] == resultArr[i]) {
+                    count++;
+                }
+            }
+            $("#rightCount").text(count);
+        }
+
+        function getRandomBottle(isRiddle = true) {
+            let arr = [1, 2, 3, 4, 5, 6];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+
+            let html = arr
+                .map(
+                    (item, index) =>
+                        `<li class="bottle" data-num="${item}"></li>`
+                )
+                .join("");
+
+            if (isRiddle) {
+                resultArr = [...arr];
+                $("#bottleList").html(html);
+            } else {
+                currentArr = [...arr];
+                $("#sortList").html(html);
+            }
+        }
+    </script>
+</html>

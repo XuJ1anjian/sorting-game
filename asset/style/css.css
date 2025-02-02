@@ -1,0 +1,129 @@
+* {
+    font-size: 18px;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    box-sizing: border-box;
+}
+
+#container {
+    padding-top: 16px;
+    margin: auto;
+    width: 100%;
+    height: 100vh;
+    max-width: 1440px;
+}
+
+h1,
+h2 {
+    margin: 0 auto 16px;
+    max-width: 60%;
+    text-align: center;
+}
+
+h1 {
+    font-size: 24px;
+}
+
+h2 {
+    font-size: 18px;
+}
+
+#riddle {
+    position: relative;
+    margin: auto;
+    padding: 16px;
+    height: 192px;
+    background: #f0f0f0;
+}
+
+.mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #f0f0f0;
+    transition: all 0.5s ease-in-out;
+    z-index: 1;
+}
+
+#bottleList {
+    display: flex;
+    justify-content: center;
+    height: 100%;
+}
+
+.bottle {
+    height: 100%;
+    width: 160px;
+}
+
+[data-num="1"] {
+    background: url(../img/blue.png) no-repeat center;
+}
+
+[data-num="2"] {
+    background: url(../img/green.png) no-repeat center;
+}
+
+[data-num="3"] {
+    background: url(../img/magenta.png) no-repeat center;
+}
+
+[data-num="4"] {
+    background: url(../img/orange.png) no-repeat center;
+}
+
+[data-num="5"] {
+    background: url(../img/red.png) no-repeat center;
+}
+
+[data-num="6"] {
+    background: url(../img/yellow.png) no-repeat center;
+}
+
+#sortArea {
+    padding: 16px;
+    height: 224px;
+}
+
+#sortList {
+    display: flex;
+    justify-content: center;
+    height: 100%;
+}
+
+#sortList li {
+    height: 100%;
+    width: 192px;
+    border: 1px solid #eee;
+}
+
+#sortList li:not(:last-child) {
+    border-right: 0;
+}
+
+.bottom-bar {
+    text-align: center;
+}
+
+button {
+    margin: 0 8px;
+    padding: 8px 16px;
+    border: 0;
+    font-size: 18px;
+    color: #fff;
+    border-radius: 4px;
+    background: #4c94e6;
+    cursor: pointer;
+}
+
+#tipBar {
+    display: none;
+}
+
+.bottom-bar p {
+    margin-bottom: 16px;
+}
